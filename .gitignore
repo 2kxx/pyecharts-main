@@ -1,0 +1,7 @@
+.DS_Store
+.gitattributes
+.idea/
+hunan_web/config.ini
+data/
+mainapp/static/data
+.empty

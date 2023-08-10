@@ -32,7 +32,7 @@ class AllMap():
         self.df = read_frame(qs=qs)
 
         # 更新时间
-        #self.spider_time = timezone.localtime(SpiderLog.objects.last().spider_time).strftime('%Y-%m-%d %H:%M:%S')
+        self.spider_time = timezone.localtime(SpiderLog.objects.last().spider_time).strftime('%Y-%m-%d %H:%M:%S')
 
         # p1 p6
         qs = Scenery.objects.filter(city__isnull=False)
@@ -51,7 +51,8 @@ class AllMap():
 
     # TODO: list meaning
     def get_county(self, full_county_name):
-        county_list = ['长沙市', '株洲市', '湘潭市', '衡阳市', '邵阳市', '岳阳市', '常德市', '张家界市', '益阳市', '郴州市', '永州市', '怀化市', '娄底市', '湘西土家族苗族自治州']
+        county_list = ['长沙市', '株洲市', '湘潭市', '衡阳市', '邵阳市', '岳阳市', '常德市', '张家界市', '益阳市', '郴州市', '永州市', '怀化市', '娄底市',
+                       '湘西土家族苗族自治州']
         for i in county_list:
             if i in full_county_name:
                 return i
@@ -97,39 +98,38 @@ class AllMap():
             is_silent=False,
         ),
             opts.GeoRegionsOpts(
-            name='岳阳市',
-            is_selected=True,
-            emphasis_label_opts=opts.LabelOpts(is_show=False),
-            itemstyle_opts=opts.ItemStyleOpts(color="#F00"),
-            is_silent=True,
-        )]
+                name='岳阳市',
+                is_selected=True,
+                emphasis_label_opts=opts.LabelOpts(is_show=False),
+                itemstyle_opts=opts.ItemStyleOpts(color="#F00"),
+                is_silent=True,
+            )]
         map = (
             Geo(init_opts=opts.InitOpts(height=h, width=w))
-            .add_schema('湖南', is_roam=False,
-                        regions_opts=highlight
-                        )
+                .add_schema('湖南', is_roam=False,
+                            regions_opts=highlight
+                            )
 
-            .add("点位信息", data_pair=[],
-                 # [[i[0], int(i[1])] for i in zip(self.map_data.index, self.map_data.values)],
-                 # maptype='china', is_roam=False,
-                 label_opts=opts.LabelOpts(color="#FFF", is_show=True),
-                 # is_map_symbol_show=False
-                 )
-            .add_coordinate("测试点1", 112.88678158734129, 28.177814637982664)
-            .add_coordinate("测试点2", 113.20538510296629, 29.24133432703801)
-            .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
-            .set_global_opts(
+                .add("点位信息", data_pair=[],
+                     # [[i[0], int(i[1])] for i in zip(self.map_data.index, self.map_data.values)],
+                     # maptype='china', is_roam=False,
+                     label_opts=opts.LabelOpts(color="#FFF", is_show=True),
+                     # is_map_symbol_show=False
+                     )
+                .add_coordinate("测试点1", 112.88678158734129, 28.177814637982664)
+                .add_coordinate("测试点2", 113.20538510296629, 29.24133432703801)
+                .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
+                .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+                .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
+                .set_global_opts(
                 title_opts=opts.TitleOpts(is_show=False, title="title"),
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#fff")),  # 去掉图例
                 visualmap_opts=opts.VisualMapOpts(max_=max_, textstyle_opts=opts.TextStyleOpts(color="#fff"))
             )
 
-            .render_embed()
+                .render_embed()
         )
         return map
-
 
     def get_p1_p2(self, h, w, is_show=False):
         sum = self.df_p4["people_percent"].sum()
@@ -138,12 +138,12 @@ class AllMap():
         # 货物重量比
         c = (
             Pie(init_opts=opts.InitOpts(height=h, width=w))
-            .add("", self.df_p4[["scenery_name", "percent_p4"]].values,
-                 label_opts=opts.LabelOpts(color="#fff", is_show=False))
-            .set_global_opts(
+                .add("", self.df_p4[["scenery_name", "percent_p4"]].values,
+                     label_opts=opts.LabelOpts(color="#fff", is_show=False))
+                .set_global_opts(
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#FFF")))
-            .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}%", color="#FFF"))
-            .render_embed()
+                .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}%", color="#FFF"))
+                .render_embed()
         )
 
         return c
@@ -157,14 +157,14 @@ class AllMap():
         # [[i[0], int(i[1])] for i in zip(map_data.index, map_data.values)]
         p6 = (
             Line(init_opts=opts.InitOpts(height=h, width=w))
-            .add_xaxis([str(i) + "小时" for i in play_time_data.index.tolist()])
-            .add_yaxis("景点数量", play_time_data.values.tolist(), is_smooth=True,
-                       label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
-            .set_series_opts(
+                .add_xaxis([str(i) + "小时" for i in play_time_data.index.tolist()])
+                .add_yaxis("景点数量", play_time_data.values.tolist(), is_smooth=True,
+                           label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
+                .set_series_opts(
                 areastyle_opts=opts.AreaStyleOpts(opacity=0.5),
                 label_opts=opts.LabelOpts(is_show=False),
             )
-            .set_global_opts(
+                .set_global_opts(
 
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="white")),
                 xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(color="#fff"),
@@ -187,9 +187,6 @@ class AllMap():
         )
 
         return p6.render_embed()
-
-
-
 
     def get_p2_p1(self, h, w, is_show=False):
         """分布地图"""
@@ -218,36 +215,36 @@ class AllMap():
             is_silent=False,
         ),
             opts.GeoRegionsOpts(
-            name='岳阳市',
-            is_selected=True,
-            emphasis_label_opts=opts.LabelOpts(is_show=False),
-            itemstyle_opts=opts.ItemStyleOpts(color="#F00"),
-            is_silent=True,
-        )]
+                name='岳阳市',
+                is_selected=True,
+                emphasis_label_opts=opts.LabelOpts(is_show=False),
+                itemstyle_opts=opts.ItemStyleOpts(color="#F00"),
+                is_silent=True,
+            )]
         map = (
             Geo(init_opts=opts.InitOpts(height=h, width=w))
-            .add_schema('湖南', is_roam=False,
-                        regions_opts=highlight
-                        )
+                .add_schema('湖南', is_roam=False,
+                            regions_opts=highlight
+                            )
 
-            .add("点位信息", data_pair=[],
-                 # [[i[0], int(i[1])] for i in zip(self.map_data.index, self.map_data.values)],
-                 # maptype='china', is_roam=False,
-                 label_opts=opts.LabelOpts(color="#FFF", is_show=True),
-                 # is_map_symbol_show=False
-                 )
-            .add_coordinate("测试点1", 112.88678158734129, 28.177814637982664)
-            .add_coordinate("测试点2", 113.20538510296629, 29.24133432703801)
-            .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
-            .set_global_opts(
+                .add("点位信息", data_pair=[],
+                     # [[i[0], int(i[1])] for i in zip(self.map_data.index, self.map_data.values)],
+                     # maptype='china', is_roam=False,
+                     label_opts=opts.LabelOpts(color="#FFF", is_show=True),
+                     # is_map_symbol_show=False
+                     )
+                .add_coordinate("测试点1", 112.88678158734129, 28.177814637982664)
+                .add_coordinate("测试点2", 113.20538510296629, 29.24133432703801)
+                .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
+                .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+                .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
+                .set_global_opts(
                 title_opts=opts.TitleOpts(is_show=False, title="title"),
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#fff")),  # 去掉图例
                 visualmap_opts=opts.VisualMapOpts(max_=max_, textstyle_opts=opts.TextStyleOpts(color="#fff"))
             )
 
-            .render_embed()
+                .render_embed()
         )
         return map
 
@@ -270,13 +267,13 @@ class AllMap():
         # 货物重量比
         c = (
             Pie(init_opts=opts.InitOpts(height=h, width=w))
-            #.add("", self.df_p4[["scenery_name", "percent_p4"]].values,
-            .add("", [("t1", 1), ("t2", 2)],
-                 label_opts=opts.LabelOpts(color="#fff", is_show=False))
-            .set_global_opts(
+                # .add("", self.df_p4[["scenery_name", "percent_p4"]].values,
+                .add("", [("t1", 1), ("t2", 2)],
+                     label_opts=opts.LabelOpts(color="#fff", is_show=False))
+                .set_global_opts(
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#FFF")))
-            .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}%", color="#FFF"))
-            .render_embed()
+                .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}%", color="#FFF"))
+                .render_embed()
         )
 
         return c
@@ -300,7 +297,7 @@ class AllMap():
                     continue
                 counts[word] = counts.get(word, 0) + 1
         excludes = ['...']
-        #for word in excludes:
+        # for word in excludes:
         #    del counts[word]
         items = list(counts.items())  # 将无序的字典类型转换为可排序的列表类型
         items.sort(key=lambda x: x[1], reverse=True)
@@ -308,8 +305,8 @@ class AllMap():
         # 设置词云图
         wordcloud = (
             WordCloud(init_opts=opts.InitOpts(height=h, width=w))
-            .add(series_name="出现数量", data_pair=items, word_size_range=[20, 100], shape=SymbolType.DIAMOND)
-            .set_global_opts(
+                .add(series_name="出现数量", data_pair=items, word_size_range=[20, 100], shape=SymbolType.DIAMOND)
+                .set_global_opts(
                 title_opts=opts.TitleOpts(title="评论词云", title_textstyle_opts=opts.TextStyleOpts(font_size=23),
                                           is_show=False),
                 legend_opts=opts.LegendOpts(is_show=False, textstyle_opts=opts.TextStyleOpts(color="#fff")),
@@ -319,8 +316,6 @@ class AllMap():
             )
         )
         return wordcloud.render_embed()
-
-
 
     def get_p2_p6(self, h, w, is_show=False):
         # P6
@@ -332,14 +327,14 @@ class AllMap():
         # [[i[0], int(i[1])] for i in zip(map_data.index, map_data.values)]
         p6 = (
             Line(init_opts=opts.InitOpts(height=h, width=w))
-            .add_xaxis([str(i) + "小时" for i in play_time_data.index.tolist()])
-            .add_yaxis("景点数量", play_time_data.values.tolist(), is_smooth=True,
-                       label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
-            .set_series_opts(
+                .add_xaxis([str(i) + "小时" for i in play_time_data.index.tolist()])
+                .add_yaxis("景点数量", play_time_data.values.tolist(), is_smooth=True,
+                           label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
+                .set_series_opts(
                 areastyle_opts=opts.AreaStyleOpts(opacity=0.5),
                 label_opts=opts.LabelOpts(is_show=False),
             )
-            .set_global_opts(
+                .set_global_opts(
 
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="white")),
                 xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(color="#fff"),
@@ -370,14 +365,14 @@ class AllMap():
 
         p7 = (
             Line(init_opts=opts.InitOpts(height=h, width=w))
-            .add_xaxis(df_p7["scenery_name"].tolist())
-            .add_yaxis("景点评分", df_p7["score"].tolist(), is_smooth=True,
-                       label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
-            .set_series_opts(
+                .add_xaxis(df_p7["scenery_name"].tolist())
+                .add_yaxis("景点评分", df_p7["score"].tolist(), is_smooth=True,
+                           label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
+                .set_series_opts(
                 areastyle_opts=opts.AreaStyleOpts(opacity=0.5),
                 label_opts=opts.LabelOpts(is_show=False),
             )
-            .set_global_opts(
+                .set_global_opts(
 
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="white")),
                 xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(color="#fff"),
@@ -405,14 +400,14 @@ class AllMap():
         # P8
         p8 = (
             Line(init_opts=opts.InitOpts(height=h, width=w))
-            .add_xaxis(self.map_data.index.tolist())
-            .add_yaxis("景点数量", self.map_data.values.tolist(), is_smooth=True,
-                       label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
-            .set_series_opts(
+                .add_xaxis(self.map_data.index.tolist())
+                .add_yaxis("景点数量", self.map_data.values.tolist(), is_smooth=True,
+                           label_opts=opts.LabelOpts(is_show=is_show, color="#fff"))
+                .set_series_opts(
                 areastyle_opts=opts.AreaStyleOpts(opacity=0.5),
                 label_opts=opts.LabelOpts(is_show=False),
             )
-            .set_global_opts(
+                .set_global_opts(
 
                 legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="white")),
                 xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(color="#fff"),

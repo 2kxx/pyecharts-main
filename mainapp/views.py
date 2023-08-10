@@ -59,19 +59,19 @@ p7 = index_comp.get_p2_p7(page_h, page_w, is_show)
 p8 = index_comp.get_p2_p8(page_h, page_w, is_show)
 
 
+
+
 # Home Page
 def home(request):
     return render(request, "home.html", data)
-
 
 # index Page
 def index(request):
     return render(request, "index.html", data)
 
 
+
 data['main_map'] = main_comp.get_map(index_h, index_w)
-
-
 def main(request):
     return render(request, "main.html", data)
 
@@ -81,26 +81,19 @@ data['sindev_plt'] = sindev_comp.get_plt(index_h, index_w)
 data['sindev_prt'] = sindev_comp.get_prt(index_h, index_w)
 data['sindev_plb'] = sindev_comp.get_plb(index_h, index_w)
 data['sindev_prb'] = sindev_comp.get_prb()
-
-
 def sindev(request):
     return render(request, "sindev.html", data)
-
 
 data['muldev_map'] = muldev_comp.get_map(index_h, index_w)
 data['muldev_plt'] = muldev_comp.get_plt(index_h, index_w)
 data['muldev_prt'] = muldev_comp.get_prt(index_h, index_w)
 data['muldev_plb'] = muldev_comp.get_plb(index_h, index_w)
 data['muldev_prb'] = muldev_comp.get_prb()
-
-
 def muldev(request):
     return render(request, "muldev.html", data)
 
 
 data['table_table'] = table_comp.get_table()
-
-
 def table(request):
     return render(request, "table.html", data)
 
@@ -110,8 +103,6 @@ def dashboard(request):
 
 
 data['dynamic_map'] = dynamic_comp.get_map(index_h, index_w)
-
-
 def dynamic(request):
     return render(request, "dynamic.html", data)
 
@@ -121,8 +112,6 @@ def dynamic(request):
 # TODO: DALETE WITH page.py(disappeared >_<)
 map_list = {"长沙分布1": data['p_2_1'], "长沙分布2": data['p_2_1'], "景点评分数据": data["p2"], "景点浏览人数": data["p3"],
             "景点人数分布": p4, "景点评论词云": p5, "景点浏览时间": p6, "景点数量": p7, "景点评分": p8}
-
-
 def page(request):
     result = {
         "is_chart": True,
@@ -157,7 +146,7 @@ def login(request):
     if request.method == 'GET':
         return render(request, "login.html", temp_txt)
     if request.method == 'POST':
-        # 请求登陆
+        #请求登陆
         concat = request.POST
         username = concat["username"]
         password = md5_util.md5(concat["password"])
@@ -181,7 +170,7 @@ def register(request):
         "go": "去登陆",
         "year": datetime.datetime.now().year,
         "next_year": int(datetime.datetime.now().year) + 1,
-        'error': ''
+        'error':''
     }
     if request.method == 'GET':
         return render(request, "register.html", temp_txt)

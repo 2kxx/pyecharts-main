@@ -9,12 +9,15 @@ from pyecharts.globals import ThemeType, SymbolType
 from mainapp import models
 from django_pandas.io import read_frame
 import jieba
-from warehouse.models import Scenery, Evaluate, SpiderLog
+from warehouse.models import Scenery, Evaluate, SpiderLog, Data
 from pyecharts import options as opts
 from pyecharts.charts import Map
 
+
 class Dynamic():
     def __init__(self):
+        csv = Data.objects.all()
+        self.pos = read_frame(qs=csv)
         print("Dynamic init")
 
     def get_map(self, h, w, is_show=True):
@@ -38,29 +41,27 @@ class Dynamic():
                 blur_label_opts=opts.LabelOpts(is_show=True),
                 is_silent=False,
             ))
-
         pos_list = []  # [(name, lng, lat, value)]
-        """
-        TODO: READ FROM DATABASE
-        for i in range(len(csv)):
-           pos_list.append([csv[i].name, csv[i].lng, csv[i].lat, csv[i].value])
-        """
-        map = (
-            Geo(init_opts=opts.InitOpts(height=h, width=w))
-            .add_schema('湖南', is_roam=False, regions_opts=highlight)
-            .add("点位信息", data_pair=[], label_opts=opts.LabelOpts(color="#FFF", is_show=True))
-            .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
-            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
-            .set_global_opts(
-                title_opts=opts.TitleOpts(is_show=False, title="title"),
-                legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#fff")),  # 去掉图例
-                visualmap_opts=opts.VisualMapOpts(max_=max_, textstyle_opts=opts.TextStyleOpts(color="#fff"))
-            )
+        for i in range(len(self.pos)):
+            pos_list.append(['测试用例' + str(i), self.pos['longitude'][i], self.pos['latitude'][i], i])
 
-        )
-        for i in range(len(pos_list)):
-            map.add_coordinate(pos_list[i][0], pos_list[i][1], pos_list[i][2])
+            map = (
+                Geo(init_opts=opts.InitOpts(height=h, width=w))
+                    .add_schema('湖南', is_roam=False, regions_opts=highlight)
+                    # .add("点位信息", data_pair=[], label_opts=opts.LabelOpts(color="#FFF", is_show=True))
+                    # .add("geo", [("测试点1", 1234), ("测试点2", 9411)])
+                    .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+                    .set_global_opts(title_opts=opts.TitleOpts(title="加入自定义的点"))
+                    .set_global_opts(
+                    title_opts=opts.TitleOpts(is_show=False, title="title"),
+                    legend_opts=opts.LegendOpts(is_show=is_show, textstyle_opts=opts.TextStyleOpts(color="#fff")),
+                    # 去掉图例
+                    visualmap_opts=opts.VisualMapOpts(max_=max_, textstyle_opts=opts.TextStyleOpts(color="#fff"))
+                )
+
+            )
+            for i in range(len(pos_list)):
+                map.add_coordinate(pos_list[i][0], pos_list[i][1], pos_list[i][2])
             map.add("点位信息", data_pair=[(pos_list[i][0], pos_list[i][3])])
-        map.render_embed()
+            map.render_embed()
         return map
